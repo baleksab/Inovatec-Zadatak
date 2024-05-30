@@ -49,7 +49,7 @@ public class VehicleRepository : IRepository<Vehicle>
                     var car = _vehicleFactory.CreateCar(int.Parse(id), brand.ParseVehicleBrand(), model, bodyType.ParseCarType(), 
                         double.Parse(mileage), double.Parse(fuelConsumption));
                     
-                    if (car == null)
+                    if (car is null)
                         Console.WriteLine("Preskocem jedno vozilo tipa automobil, nije prepoznata marka!");
                     else 
                         vehicles.Add(car);

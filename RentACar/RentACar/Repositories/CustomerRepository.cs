@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
-using RentACar.Models.Customers;
+using RentACar.Models;
 
 namespace RentACar.Repositories;
 

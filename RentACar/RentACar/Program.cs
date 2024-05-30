@@ -1,4 +1,4 @@
-﻿using RentACar.Models.Customers;
+﻿using RentACar.Models;
 using RentACar.Models.Vehicles;
 using RentACar.Models.Vehicles.Cars;
 using RentACar.Models.Vehicles.Factories;
