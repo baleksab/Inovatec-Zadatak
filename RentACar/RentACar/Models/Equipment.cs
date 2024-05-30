@@ -4,10 +4,10 @@ public class Equipment
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    public string Cost { get; set; }
+    public double Cost { get; set; }
     public int IncreasesPrice { get; set; }
 
-    public Equipment(int id, string name, string cost, int increasesPrice)
+    public Equipment(int id, string name, double cost, int increasesPrice)
     {
         Id = id;
         Name = name;

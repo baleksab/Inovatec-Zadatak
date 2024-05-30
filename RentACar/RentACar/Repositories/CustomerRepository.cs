@@ -2,6 +2,7 @@
 using CsvHelper;
 using CsvHelper.Configuration;
 using RentACar.Models;
+using RentACar.Repositories.Interfaces;
 
 namespace RentACar.Repositories;
 
@@ -30,6 +31,7 @@ public class CustomerRepository : IRepository<Customer>
             var membership = csvReader.GetField(4);
 
             var customer = new Customer(int.Parse(id), firstName, lastName, double.Parse(budget), membership.ParseMembershipType());
+           
             customers.Add(customer);
         }
 

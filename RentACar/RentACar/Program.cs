@@ -3,6 +3,7 @@ using RentACar.Models.Vehicles;
 using RentACar.Models.Vehicles.Cars;
 using RentACar.Models.Vehicles.Factories;
 using RentACar.Repositories;
+using RentACar.Repositories.Interfaces;
 
 namespace RentACar;
 

@@ -1,11 +1,11 @@
 ﻿namespace RentACar.Models;
 
-public class VehicleEquipment
+public class CarEquipment
 {
     public int VehicleId { get; set; }
     public int EquipmentId { get; set; }
 
-    public VehicleEquipment(int vehicleId, int equipmentId)
+    public CarEquipment(int vehicleId, int equipmentId)
     {
         VehicleId = vehicleId;
         EquipmentId = equipmentId;

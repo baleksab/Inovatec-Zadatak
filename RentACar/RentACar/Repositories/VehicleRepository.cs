@@ -5,6 +5,7 @@ using RentACar.Models.Vehicles;
 using RentACar.Models.Vehicles.Cars;
 using RentACar.Models.Vehicles.Factories;
 using RentACar.Models.Vehicles.Motorcycles;
+using RentACar.Repositories.Interfaces;
 
 namespace RentACar.Repositories;
 
@@ -24,7 +25,7 @@ public class VehicleRepository : IRepository<Vehicle>
             HasHeaderRecord = true,
         };
         
-        using var streamReader = new StreamReader(Path.Combine(Configuration.PathToCsv, Configuration.CarCsv));
+        using var streamReader = new StreamReader(Path.Combine(Configuration.PathToCsv, Configuration.VehicleCsv));
         using var csvReader = new CsvReader(streamReader, config);
 
         csvReader.Read();
