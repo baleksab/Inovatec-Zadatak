@@ -6,7 +6,7 @@ public abstract class Car : Vehicle
     {
         Limousine,
         Hatchback,
-        Wagon,
+        Caravan,
         Coupe,
         Convertible,
         Minivan,
@@ -15,10 +15,13 @@ public abstract class Car : Vehicle
     }
     
     public Type CarType { get; set; }
-
-    protected Car(int id, string model, Type carType, double fuelConsumption) : base(id, model, fuelConsumption, Configuration.CarBasePrice)
+    public double Mileage { get; set; }
+    
+    protected Car(int id, string brand, string model, Type carType, double mileage, double fuelConsumption) 
+        : base(id, brand, model, fuelConsumption, Configuration.CarBasePrice)
     {
         CarType = carType;
+        Mileage = mileage;
     }
 
     public override void DisplayInformation()

@@ -2,13 +2,37 @@
 
 public class Yamaha : Motorcycle
 {
-    public Yamaha(int id, string model, Type motorcycleType, double fuelConsumption) : base(id, model, motorcycleType, fuelConsumption)
+    public Yamaha(int id, string model, Type motorcycleType, double engineSize, double enginePower, double fuelConsumption) 
+        : base(id, "Yamaha", model, motorcycleType, engineSize, enginePower, fuelConsumption)
     {
         
     }
 
-    public override double CalculateCost()
+
+    public override double CalculateRentCost()
     {
-        throw new NotImplementedException();
+        double cost = BaseCost;
+
+        cost += BaseCost * 0.10; // u startu se cena uvećava za 10%,
+
+        if (EnginePower > 180) // zatim ako mu je snaga veća od 180 KS cena se uvećava za 5%,
+            cost += BaseCost * 0.05;
+        else // u suprotnom se smanjuje za 10%,
+            cost -= BaseCost * 0.10;
+
+        switch (MotorcycleType)
+        {
+            case Type.Heritage: // ako je Heritage onda se uvećava za 50e
+                cost += 50;
+                break;
+            case Type.Sport: // ako je Sport uvećava se za 100e
+                cost += 100;
+                break;
+            default: // u suprotnom se smanjuje za 10e
+                cost -= 10;
+                break;
+        }
+
+        return cost;
     }
 }
