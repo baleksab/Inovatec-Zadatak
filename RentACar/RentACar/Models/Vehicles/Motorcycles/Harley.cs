@@ -2,8 +2,8 @@
 
 public class Harley : Motorcycle
 {
-    public Harley(int id, string model, Type motorcycleType, double engineSize, double enginePower, double fuelConsumption) 
-        : base(id, "Harley", model, motorcycleType, engineSize, enginePower, fuelConsumption)
+    public Harley(int id, string model, MotorcycleType motorcycleType, double engineSize, double enginePower, double fuelConsumption) 
+        : base(id, VehicleBrand.Harley, model, motorcycleType, engineSize, enginePower, fuelConsumption)
     {
         
     }

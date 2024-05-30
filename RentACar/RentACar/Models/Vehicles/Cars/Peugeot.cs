@@ -2,8 +2,8 @@
 
 public class Peugeot : Car
 {
-    public Peugeot(int id, string model, Type carType, double mileage, double fuelConsumption) 
-        : base(id, "Peugeot", model, carType, mileage, fuelConsumption)
+    public Peugeot(int id, string model, CarType carType, double mileage, double fuelConsumption) 
+        : base(id, VehicleBrand.Peugeot, model, carType, mileage, fuelConsumption)
     {
         
     }
@@ -13,12 +13,18 @@ public class Peugeot : Car
     {
         double cost = BaseCost;
         
-        if (CarType == Type.Limousine) // ako je limuzina cena se uvećava za 15%
-            cost += BaseCost * 0.15;
-        else if (CarType == Type.Caravan) // ako je karavan cena se uvećava za 20%,
-            cost += BaseCost * 0.20;
-        else // u suprotnom se smanjuje za 5%.
-            cost -= BaseCost * 0.05;
+        switch (CarType)
+        {
+            case CarType.Limousine: // ako je limuzina cena se uvećava za 15%
+                cost += BaseCost * 0.15;
+                break;
+            case CarType.Caravan:  // ako je karavan cena se uvećava za 20%,
+                cost += BaseCost * 0.20;
+                break;
+            default:  // u suprotnom se smanjuje za 5%.
+                cost -= BaseCost * 0.05;
+                break;
+        }
 
         return cost;
     }

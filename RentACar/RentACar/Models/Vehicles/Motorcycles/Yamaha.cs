@@ -2,8 +2,8 @@
 
 public class Yamaha : Motorcycle
 {
-    public Yamaha(int id, string model, Type motorcycleType, double engineSize, double enginePower, double fuelConsumption) 
-        : base(id, "Yamaha", model, motorcycleType, engineSize, enginePower, fuelConsumption)
+    public Yamaha(int id, string model, MotorcycleType motorcycleType, double engineSize, double enginePower, double fuelConsumption) 
+        : base(id, VehicleBrand.Yamaha, model, motorcycleType, engineSize, enginePower, fuelConsumption)
     {
         
     }
@@ -22,10 +22,10 @@ public class Yamaha : Motorcycle
 
         switch (MotorcycleType)
         {
-            case Type.Heritage: // ako je Heritage onda se uvećava za 50e
+            case MotorcycleType.Heritage: // ako je Heritage onda se uvećava za 50e
                 cost += 50;
                 break;
-            case Type.Sport: // ako je Sport uvećava se za 100e
+            case MotorcycleType.Sport: // ako je Sport uvećava se za 100e
                 cost += 100;
                 break;
             default: // u suprotnom se smanjuje za 10e

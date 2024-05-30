@@ -4,7 +4,38 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+        <Nullable>disable</Nullable>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CsvHelper" Version="32.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\kupci.csv" />
+      <Content Include="Resources\kupci.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\oprema.csv" />
+      <Content Include="Resources\oprema.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\rezervacije.csv" />
+      <Content Include="Resources\rezervacije.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\vozila.csv" />
+      <Content Include="Resources\vozila.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\vozilo_oprema.csv" />
+      <Content Include="Resources\vozilo_oprema.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\zahtevi_za_rezervacije.csv" />
+      <Content Include="Resources\zahtevi_za_rezervacije.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
 
 </Project>

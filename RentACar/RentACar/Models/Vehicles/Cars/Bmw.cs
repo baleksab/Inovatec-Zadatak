@@ -2,8 +2,8 @@
 
 public class Bmw : Car
 {
-    public Bmw(int id, string model, Type carType, double mileage, double fuelConsumption) 
-        : base(id, "BMW", model, carType, mileage, fuelConsumption)
+    public Bmw(int id, string model, CarType carType, double mileage, double fuelConsumption) 
+        : base(id, VehicleBrand.Bmw, model, carType, mileage, fuelConsumption)
     {
         
     }
