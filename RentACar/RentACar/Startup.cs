@@ -17,6 +17,8 @@ public class Startup
         var simulatorService = serviceProvider.GetService<ISimulatorService>();
         
         simulatorService.ShowVehicleInformation();
+        simulatorService.ShowCustomerInformation();
+        simulatorService.ShowSimulation();
     }
 
     private static ServiceProvider RegisterServices()
@@ -32,6 +34,8 @@ public class Startup
             .AddTransient<IRepository<Vehicle>, VehicleRepository>()
             .AddTransient<VehicleService>()
             .AddTransient<EquipmentService>()
+            .AddTransient<CustomerService>()
+            .AddTransient<ReservationService>()
             .AddTransient<ISimulatorService, SimulatorService>()
             .BuildServiceProvider();
 

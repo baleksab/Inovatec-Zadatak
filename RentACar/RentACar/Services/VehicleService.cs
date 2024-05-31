@@ -27,9 +27,9 @@ public class VehicleService
 
     public ICollection<Vehicle> GetAllVehiclesWithEquipment()
     {
-        var vehicles = GetAllVehicles().ToList();
-        var carEquipments = _carEquipmentRepository.GetAll().ToList();
-        var equipments = _equipmentService.GetAllEquipments().ToList();
+        var vehicles = GetAllVehicles();
+        var carEquipments = _carEquipmentRepository.GetAll();
+        var equipments = _equipmentService.GetAllEquipments();
         
         var joinedEquipment = from ce in carEquipments
             join e in equipments on ce.EquipmentId equals e.Id
@@ -47,7 +47,6 @@ public class VehicleService
             if (vehicle != null)
                 ((Car)vehicle).Equipments = data.Equipments;
         }
-
         return vehicles;
     }
 }

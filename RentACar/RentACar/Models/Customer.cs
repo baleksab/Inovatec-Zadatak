@@ -21,18 +21,23 @@ public class Customer : IMembershipDiscount
 
     public override string ToString()
     {
-        return
-            $"{nameof(Id)}: {Id}, {nameof(FirstName)}: {FirstName}, {nameof(LastName)}: {LastName}, {nameof(Budget)}: {Budget}, {nameof(MembershipType)}: {MembershipType}";
+        return $"Customer Details:\n" +
+               $"  - ID: {Id}\n" +
+               $"  - First Name: {FirstName}\n" +
+               $"  - Last Name: {LastName}\n" +
+               $"  - Budget: {Budget}$\n" +
+               $"  - Membership Type: {MembershipType}\n" +
+               $"  - Membership Discount: {(GetMembershipDiscount() > 0 ? GetMembershipDiscount() + "%" : "None")}\n";
     }
 
-    public double GiveMembershipDiscount()
+    public double GetMembershipDiscount()
     {
         switch (MembershipType)
         {
             case MembershipType.Vip:
-                return Configuration.VipDiscount / 100;
+                return Configuration.VipDiscount;
             case MembershipType.Basic:
-                return Configuration.BasicDiscount / 100;
+                return Configuration.BasicDiscount;
             default:
                 return 0;
         }

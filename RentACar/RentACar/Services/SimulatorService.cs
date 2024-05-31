@@ -5,14 +5,21 @@ namespace RentACar.Services;
 public class SimulatorService : ISimulatorService
 {
     private readonly VehicleService _vehicleService;
+    private readonly CustomerService _customerService;
+    private readonly ReservationService _reservationService;
 
-    public SimulatorService(VehicleService vehicleService)
+    public SimulatorService(VehicleService vehicleService, CustomerService customerService,
+        ReservationService reservationService)
     {
         _vehicleService = vehicleService;
+        _customerService = customerService;
+        _reservationService = reservationService;
     }
     
     public void ShowVehicleInformation()
     {
+        ShowHeader("Vehicle information");
+        
         var vehicles = _vehicleService.GetAllVehiclesWithEquipment();
 
         foreach (var vehicle in vehicles)
@@ -23,11 +30,29 @@ public class SimulatorService : ISimulatorService
 
     public void ShowCustomerInformation()
     {
-        throw new NotImplementedException();
-    }
+        ShowHeader("Customer information");
+        
+        var customers = _customerService.GetAllCustomers();
 
-    public void SimulateRenting()
+        foreach (var customer in customers)
+        {
+            Console.WriteLine(customer);
+        }
+    }
+    
+    public void ShowSimulation()
     {
-        throw new NotImplementedException();
+        ShowHeader("Renting simulation");
+        
+        _reservationService.ProcessReservations();
+    }
+    
+    private void ShowHeader(string title)
+    {
+        Console.WriteLine();
+        Console.WriteLine("=====================================================");
+        Console.WriteLine("\t" + title);
+        Console.WriteLine("=====================================================");
+        Console.WriteLine();
     }
 }

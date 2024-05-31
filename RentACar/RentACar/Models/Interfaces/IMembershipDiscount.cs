@@ -2,5 +2,5 @@
 
 public interface IMembershipDiscount
 {
-    double GiveMembershipDiscount();
+    double GetMembershipDiscount();
 }

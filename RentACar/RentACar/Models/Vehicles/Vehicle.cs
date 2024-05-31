@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using RentACar.Models.Interfaces;
 
 namespace RentACar.Models.Vehicles;
 
@@ -33,8 +34,8 @@ public abstract class Vehicle
                $"  - Brand: {Brand}\n" +
                $"  - Model: {Model}\n" +
                $"  - Fuel Consumption: {FuelConsumption} liters per 100km\n" +
-               $"  - Base Cost: ${BaseCost}\n" +
-               $"  - Rent Cost: ${RentCost}\n";;
+               $"  - Base Cost: {BaseCost}$\n" +
+               $"  - Rent Cost: {RentCost}$\n";;
         
     }
 }
