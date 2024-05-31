@@ -1,4 +1,7 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
 using RentACar.Models;
@@ -8,11 +11,14 @@ namespace RentACar.Repositories;
 
 public class EquipmentRepository : IRepository<Equipment>
 {
-    public IEnumerable<Equipment> GetAll()
+    public ICollection<Equipment> GetAll()
     {
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             HasHeaderRecord = true,
+            MissingFieldFound = null,
+            IgnoreBlankLines = true,
+            ShouldSkipRecord = args => args.Row.Parser.Record.All(string.IsNullOrWhiteSpace)
         };
         
         using var streamReader = new StreamReader(Path.Combine(Configuration.PathToCsv, Configuration.EquipmentCsv));

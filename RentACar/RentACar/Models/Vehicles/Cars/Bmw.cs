@@ -8,7 +8,7 @@ public class Bmw : Car
         
     }
 
-    public override double CalculateRentCost()
+    protected override double GetAdjustedBaseCost()
     {
         double cost = BaseCost;
         

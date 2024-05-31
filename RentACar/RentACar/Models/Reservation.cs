@@ -1,4 +1,6 @@
-﻿namespace RentACar.Models;
+﻿using System;
+
+namespace RentACar.Models;
 
 public class Reservation
 {

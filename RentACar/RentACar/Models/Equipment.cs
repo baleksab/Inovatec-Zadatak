@@ -18,6 +18,6 @@ public class Equipment
     public override string ToString()
     {
         return
-            $"{nameof(Id)}: {Id}, {nameof(Name)}: {Name}, {nameof(Cost)}: {Cost}, {nameof(IncreasesPrice)}: {IncreasesPrice}";
+            $"{nameof(Id)}: {Id}, {nameof(Name)}: {Name}, {nameof(Cost)}: ${Cost}, {nameof(IncreasesPrice)}: {IncreasesPrice != 0}";
     }
 }

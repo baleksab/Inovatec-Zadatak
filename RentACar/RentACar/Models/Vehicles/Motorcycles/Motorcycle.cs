@@ -14,10 +14,17 @@ public abstract class Motorcycle : Vehicle
         EnginePower = enginePower;
     }
 
+    protected override double GetFinalRentCost()
+    {
+        return GetAdjustedBaseCost();
+    }
+
     public override string ToString()
     {
-        return
-            $"{base.ToString()}, {nameof(MotorcycleType)}: {MotorcycleType}, {nameof(EngineSize)}: {EngineSize}, {nameof(EnginePower)}: {EnginePower}";
+        return $"{base.ToString()}" +
+               $"  - Type: {MotorcycleType}\n" +
+               $"  - Engine Size: {EngineSize} cc\n" +
+               $"  - Engine Power: {EnginePower} HP\n";
     }
 }
 

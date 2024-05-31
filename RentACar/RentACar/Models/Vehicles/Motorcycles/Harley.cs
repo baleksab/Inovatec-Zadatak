@@ -9,7 +9,7 @@ public class Harley : Motorcycle
     }
 
 
-    public override double CalculateRentCost()
+    protected override double GetAdjustedBaseCost()
     {
         double cost = BaseCost;
         

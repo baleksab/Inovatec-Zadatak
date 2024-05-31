@@ -10,6 +10,7 @@ public abstract class Vehicle
     public string Model { get; set; }
     public double FuelConsumption { get; set; }
     public double BaseCost { get; set; }
+    public double RentCost => GetFinalRentCost();
     
     protected Vehicle(int id, VehicleType vehicleType, VehicleBrand brand, string model, double fuelConsumption, double baseCost)
     {
@@ -21,13 +22,20 @@ public abstract class Vehicle
         BaseCost = baseCost;
     }
 
-    public abstract double CalculateRentCost();
-
-
+    protected abstract double GetAdjustedBaseCost();
+    protected abstract double GetFinalRentCost();
+    
     public override string ToString()
     {
-        return
-            $"{nameof(Id)}: {Id}, {nameof(VehicleType)}: {VehicleType}, {nameof(Brand)}: {Brand}, {nameof(Model)}: {Model}, {nameof(FuelConsumption)}: {FuelConsumption}, {nameof(BaseCost)}: {BaseCost}";
+        return $"Vehicle Details:\n" +
+               $"  - ID: {Id}\n" +
+               $"  - Type: {VehicleType}\n" +
+               $"  - Brand: {Brand}\n" +
+               $"  - Model: {Model}\n" +
+               $"  - Fuel Consumption: {FuelConsumption} liters per 100km\n" +
+               $"  - Base Cost: ${BaseCost}\n" +
+               $"  - Rent Cost: ${RentCost}\n";;
+        
     }
 }
 

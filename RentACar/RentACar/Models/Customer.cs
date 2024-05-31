@@ -1,6 +1,8 @@
-﻿namespace RentACar.Models;
+﻿using RentACar.Models.Interfaces;
 
-public class Customer
+namespace RentACar.Models;
+
+public class Customer : IMembershipDiscount
 {
     public int Id { get; set; }
     public string FirstName { get; set; }
@@ -21,6 +23,19 @@ public class Customer
     {
         return
             $"{nameof(Id)}: {Id}, {nameof(FirstName)}: {FirstName}, {nameof(LastName)}: {LastName}, {nameof(Budget)}: {Budget}, {nameof(MembershipType)}: {MembershipType}";
+    }
+
+    public double GiveMembershipDiscount()
+    {
+        switch (MembershipType)
+        {
+            case MembershipType.Vip:
+                return Configuration.VipDiscount / 100;
+            case MembershipType.Basic:
+                return Configuration.BasicDiscount / 100;
+            default:
+                return 0;
+        }
     }
 }
 

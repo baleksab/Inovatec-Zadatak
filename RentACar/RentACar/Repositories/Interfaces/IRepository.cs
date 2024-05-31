@@ -1,6 +1,8 @@
-﻿namespace RentACar.Repositories.Interfaces;
+﻿using System.Collections.Generic;
 
-public interface IRepository<out T>
+namespace RentACar.Repositories.Interfaces;
+
+public interface IRepository<T>
 {
-    IEnumerable<T> GetAll();
+    ICollection<T> GetAll();
 }
