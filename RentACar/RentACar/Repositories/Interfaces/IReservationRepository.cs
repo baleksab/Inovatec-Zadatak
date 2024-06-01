@@ -4,5 +4,5 @@ namespace RentACar.Repositories.Interfaces;
 
 public interface IReservationRepository : IRepository<Reservation>
 {
-    void AddReservation(Reservation reservation);
+    void AddNewReservation(Reservation reservation);
 }

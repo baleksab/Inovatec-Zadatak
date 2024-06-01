@@ -51,7 +51,7 @@ public abstract class Car : Vehicle
         return $"{base.ToString()}" +
                $"  - Type: {CarType}\n" +
                $"  - Mileage: {Mileage}km\n" +
-               $"  - Equipments: (Cost of each item was already applied to rent cost)  \n{equipmentsString}\n";
+               $"  - Equipments: (Cost of each item was already applied to adjusted rent cost)  \n{equipmentsString}\n";
     }
 }
 

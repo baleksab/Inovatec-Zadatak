@@ -44,8 +44,35 @@ public class ReservationRepository : IReservationRepository
         return reservations;
     }
 
-    public void AddReservation(Reservation reservation)
+    public void AddNewReservation(Reservation reservation)
     {
-        throw new NotImplementedException();
+        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+        {
+            HasHeaderRecord = false,
+            MissingFieldFound = null,
+            IgnoreBlankLines = true,
+            ShouldSkipRecord = args => args.Row.Parser.Record.All(string.IsNullOrWhiteSpace)
+        };
+        
+        var filePath = Path.Combine(Configuration.PathToOuputCsv, Configuration.OutputCsv);
+        bool fileExists = File.Exists(filePath);
+
+        using var streamWriter = new StreamWriter(filePath, append: true);
+        using var csvWriter = new CsvWriter(streamWriter, config);
+
+        if (!fileExists || new FileInfo(filePath).Length == 0)
+        {
+            csvWriter.WriteField("VoziloId");
+            csvWriter.WriteField("KupacId");
+            csvWriter.WriteField("PocetakRezervacije");
+            csvWriter.WriteField("KrajRezervacije");
+            csvWriter.NextRecord();
+        }
+
+        csvWriter.WriteField(reservation.VehicleId);
+        csvWriter.WriteField(reservation.CustomerId);
+        csvWriter.WriteField(reservation.StartDate.ToString("yy-MM-dd"));
+        csvWriter.WriteField(reservation.EndDate.ToString("yy-MM-dd"));
+        csvWriter.NextRecord();
     }
 }

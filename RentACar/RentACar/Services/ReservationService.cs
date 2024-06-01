@@ -51,8 +51,6 @@ public class ReservationService
         var sortedQuery = query
             .OrderBy(row => row.ReservationRequest.DateOfArrival)
             .ThenBy(row => row.Customer.MembershipType);
-
-        var newReservations = new List<Reservation>();
         
         foreach (var row in sortedQuery)
         {
@@ -61,22 +59,33 @@ public class ReservationService
             var request = row.ReservationRequest;
             
             Console.WriteLine($"{customer.FirstName + " " + customer.LastName} has arrived to " +
-                              $"RentACar at date {request.DateOfArrival:hh/MM/yyyy} with a budget of {customer.Budget}$. " +
+                              $"RentACar at date {request.DateOfArrival:dd/MM/yyyy} with a budget of {customer.Budget}$. " +
                               $"{(customer.MembershipType != MembershipType.None ? "They are a " + customer.MembershipType + " member" : "")}");
             Console.WriteLine($"They wish to rent a {vehicle.VehicleType}, {vehicle.Brand} {vehicle.Model} " +
                               $"({(vehicle is Car ? ((Car) vehicle).CarType : ((Motorcycle) vehicle).MotorcycleType)}), " +
                               $"on {request.DateOfReservation:dd/MM/yyyy} for {request.Duration} days until {request.DateOfReservation.AddDays(request.Duration):dd/MM/yyyy}.");
 
             var alreadyHasReservation = reservations
-                .FirstOrDefault(reservation => reservation.StartDate <= request.DateOfReservation &&
+                .Any(reservation => reservation.CustomerId == customer.Id && 
+                                               reservation.StartDate <= request.DateOfReservation && 
+                                               request.DateOfReservation <= reservation.EndDate);
+
+            if (alreadyHasReservation)
+            {
+                Console.WriteLine("RESERVATION FAILED: Customer already has a reservation during this period!\n");
+                
+                continue;
+            }
+            
+            var vehicleIsReserved = reservations
+                .Any(reservation => reservation.VehicleId == vehicle.Id &&
+                                    reservation.StartDate <= request.DateOfReservation && 
                                     request.DateOfReservation <= reservation.EndDate);
 
-            if (alreadyHasReservation != null)
+            if (vehicleIsReserved)
             {
-                Console.WriteLine(alreadyHasReservation.CustomerId == customer.Id
-                    ? "RESERVATION FAILED: Customer already has a reservation during this period!\n"
-                    : "RESERVATION FAILED: The request vehicle is already reserved during this period!\n");
-                
+                Console.WriteLine("RESERVATION FAILED: Vehicle is already reserved during this period!\n");
+
                 continue;
             }
             
@@ -107,9 +116,10 @@ public class ReservationService
                 request.DateOfReservation.AddDays(request.Duration));
             
             reservations.Add(reservation);
-            newReservations.Add(reservation);
             
-            Console.WriteLine($"RESERVARTION SUCCESSFUL: Customer has successfully reserved this vehicle and his new budget is {customer.Budget}\n");
+            Console.WriteLine($"RESERVARTION SUCCESSFUL: Customer has successfully reserved this vehicle and his new budget is {customer.Budget}$\n");
+            
+            _reservationRepository.AddNewReservation(reservation);
         }
     }
 }

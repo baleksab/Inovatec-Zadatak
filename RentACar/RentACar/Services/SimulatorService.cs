@@ -45,9 +45,11 @@ public class SimulatorService : ISimulatorService
         ShowHeader("Renting simulation");
         
         _reservationService.ProcessReservations();
+
+        Console.WriteLine($"New reservations (if any) are stored at {Path.Combine(Configuration.PathToOuputCsv, Configuration.OutputCsv)}");
     }
     
-    private void ShowHeader(string title)
+    private static void ShowHeader(string title)
     {
         Console.WriteLine();
         Console.WriteLine("=====================================================");

@@ -16,4 +16,7 @@ public class Configuration
     public static readonly string EquipmentCsv = "oprema.csv";
     public static readonly string ReservationCsv = "rezervacije.csv";
     public static readonly string ReservationRequestCsv = "zahtevi_za_rezervacije.csv";
+
+    public static readonly string PathToOuputCsv = ".";
+    public static readonly string OutputCsv = "nove_rezervacije.csv";
 }
