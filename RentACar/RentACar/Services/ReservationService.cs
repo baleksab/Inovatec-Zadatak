@@ -1,4 +1,5 @@
 ﻿using RentACar.Models;
+using RentACar.Models.Vehicles;
 using RentACar.Models.Vehicles.Cars;
 using RentACar.Models.Vehicles.Motorcycles;
 using RentACar.Repositories.Interfaces;
@@ -51,64 +52,27 @@ public class ReservationService
         var sortedQuery = query
             .OrderBy(row => row.ReservationRequest.DateOfArrival)
             .ThenBy(row => row.Customer.MembershipType);
+
+        var newReservations = new List<Reservation>();
         
         foreach (var row in sortedQuery)
         {
             var vehicle = row.Vehicle;
             var customer = row.Customer;
             var request = row.ReservationRequest;
-            
-            Console.WriteLine($"{customer.FirstName + " " + customer.LastName} has arrived to " +
-                              $"RentACar at date {request.DateOfArrival:dd/MM/yyyy} with a budget of {customer.Budget}$. " +
-                              $"{(customer.MembershipType != MembershipType.None ? "They are a " + customer.MembershipType + " member" : "")}");
-            Console.WriteLine($"They wish to rent a {vehicle.VehicleType}, {vehicle.Brand} {vehicle.Model} " +
-                              $"({(vehicle is Car ? ((Car) vehicle).CarType : ((Motorcycle) vehicle).MotorcycleType)}), " +
-                              $"on {request.DateOfReservation:dd/MM/yyyy} for {request.Duration} days until {request.DateOfReservation.AddDays(request.Duration):dd/MM/yyyy}.");
 
-            var alreadyHasReservation = reservations
-                .Any(reservation => reservation.CustomerId == customer.Id && 
-                                               reservation.StartDate <= request.DateOfReservation && 
-                                               request.DateOfReservation <= reservation.EndDate);
+            PrintCustomerArrival(customer, request, vehicle);
 
-            if (alreadyHasReservation)
-            {
-                Console.WriteLine("RESERVATION FAILED: Customer already has a reservation during this period!\n");
-                
+            if (CheckIfAlreadyHasVehicleReserved(customer, reservations, request))
                 continue;
-            }
             
-            var vehicleIsReserved = reservations
-                .Any(reservation => reservation.VehicleId == vehicle.Id &&
-                                    reservation.StartDate <= request.DateOfReservation && 
-                                    request.DateOfReservation <= reservation.EndDate);
-
-            if (vehicleIsReserved)
-            {
-                Console.WriteLine("RESERVATION FAILED: Vehicle is already reserved during this period!\n");
-
+            if (CheckIfVehicleIsReserved(reservations, request, vehicle))
                 continue;
-            }
             
-            var rentCost = vehicle.RentCost;
+            var total = CalculateRentCost(customer, request, vehicle);
 
-            Console.Write($"This vehicle costs {vehicle.RentCost}$ per day to rent, ");
-
-            if (customer.MembershipType != MembershipType.None)
-            {
-                rentCost -= ( rentCost * customer.GetMembershipDiscount() / 100);
-                Console.Write($"they are a {customer.MembershipType} member so they get a {customer.GetMembershipDiscount()}% discount adjusting their rent cost to {rentCost}$, ");
-            }
-
-            var total = rentCost * request.Duration;
-            
-            Console.WriteLine($"since they want to rent for {request.Duration} days it would total them {total}$");
-
-            if (customer.Budget < total)
-            {
-                Console.WriteLine("RESERVATION FAILED: Customer doesn't have enough money for this reservation!\n");
-                
+            if (CheckIfCantAfford(customer, total))
                 continue;
-            }
 
             customer.Budget -= total;
             
@@ -116,10 +80,80 @@ public class ReservationService
                 request.DateOfReservation.AddDays(request.Duration));
             
             reservations.Add(reservation);
+            newReservations.Add(reservation);
             
             Console.WriteLine($"RESERVARTION SUCCESSFUL: Customer has successfully reserved this vehicle and his new budget is {customer.Budget}$\n");
-            
-            _reservationRepository.AddNewReservation(reservation);
         }
+        
+        _reservationRepository.SaveNewReservations(newReservations);
+    }
+
+    private static void PrintCustomerArrival(Customer customer, ReservationRequest request, Vehicle vehicle)
+    {
+        Console.WriteLine($"{customer.FirstName + " " + customer.LastName} has arrived to " +
+                          $"RentACar at date {request.DateOfArrival:dd/MM/yyyy} with a budget of {customer.Budget}$. " +
+                          $"{(customer.MembershipType != MembershipType.None ? "They are a " + customer.MembershipType + " member" : "")}");
+        Console.WriteLine($"They wish to rent a {vehicle.VehicleType}, {vehicle.Brand} {vehicle.Model} " +
+                          $"({(vehicle is Car ? ((Car) vehicle).CarType : ((Motorcycle) vehicle).MotorcycleType)}), " +
+                          $"on {request.DateOfReservation:dd/MM/yyyy} for {request.Duration} days until {request.DateOfReservation.AddDays(request.Duration):dd/MM/yyyy}.");
+    }
+
+    private static bool CheckIfAlreadyHasVehicleReserved(Customer customer, ICollection<Reservation> reservations, ReservationRequest request)
+    {
+        var alreadyHasReservation = reservations
+            .Any(reservation => reservation.CustomerId == customer.Id && 
+                                reservation.StartDate <= request.DateOfReservation && 
+                                request.DateOfReservation <= reservation.EndDate);
+
+        if (!alreadyHasReservation) 
+            return false;
+        
+        Console.WriteLine("RESERVATION FAILED: Customer already has a reservation during this period!\n");
+        
+        return true;
+    }
+
+    private static bool CheckIfVehicleIsReserved(ICollection<Reservation> reservations, ReservationRequest request, Vehicle vehicle)
+    {
+        var vehicleIsReserved = reservations
+            .Any(reservation => reservation.VehicleId == vehicle.Id &&
+                                reservation.StartDate <= request.DateOfReservation && 
+                                request.DateOfReservation <= reservation.EndDate);
+
+        if (!vehicleIsReserved)
+            return false;
+        
+        Console.WriteLine("RESERVATION FAILED: Vehicle is already reserved during this period!\n");
+
+        return true;
+    }
+
+    private static double CalculateRentCost(Customer customer, ReservationRequest request, Vehicle vehicle)
+    {
+        var rentCost = vehicle.RentCost;
+
+        Console.Write($"This vehicle costs {rentCost}$ per day to rent, ");
+
+        if (customer.MembershipType != MembershipType.None)
+        {
+            rentCost -= ( rentCost * customer.GetMembershipDiscount() / 100);
+            Console.Write($"they are a {customer.MembershipType} member so they get a {customer.GetMembershipDiscount()}% discount adjusting their rent cost to {rentCost}$, ");
+        }
+
+        var totalCost = rentCost * request.Duration;
+        
+        Console.WriteLine($"since they want to rent for {request.Duration} days it would total them {totalCost}$");
+        
+        return totalCost;
+    }
+
+    private static bool CheckIfCantAfford(Customer customer, double totalCost)
+    {
+        if (customer.Budget >= totalCost)
+            return false;
+        
+        Console.WriteLine("RESERVATION FAILED: Customer doesn't have enough money for this reservation!\n");
+
+        return true;
     }
 }

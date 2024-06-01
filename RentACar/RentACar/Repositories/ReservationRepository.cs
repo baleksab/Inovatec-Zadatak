@@ -44,7 +44,7 @@ public class ReservationRepository : IReservationRepository
         return reservations;
     }
 
-    public void AddNewReservation(Reservation reservation)
+    public void SaveNewReservations(ICollection<Reservation> reservations)
     {
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
@@ -54,25 +54,22 @@ public class ReservationRepository : IReservationRepository
             ShouldSkipRecord = args => args.Row.Parser.Record.All(string.IsNullOrWhiteSpace)
         };
         
-        var filePath = Path.Combine(Configuration.PathToOuputCsv, Configuration.OutputCsv);
-        bool fileExists = File.Exists(filePath);
-
-        using var streamWriter = new StreamWriter(filePath, append: true);
+        using var streamWriter = new StreamWriter(Path.Combine(Configuration.PathToOuputCsv, Configuration.OutputCsv));
         using var csvWriter = new CsvWriter(streamWriter, config);
+        
+        csvWriter.WriteField("VoziloId");
+        csvWriter.WriteField("KupacId");
+        csvWriter.WriteField("PocetakRezervacije");
+        csvWriter.WriteField("KrajRezervacije");
+        csvWriter.NextRecord();
 
-        if (!fileExists || new FileInfo(filePath).Length == 0)
+        foreach (var reservation in reservations)
         {
-            csvWriter.WriteField("VoziloId");
-            csvWriter.WriteField("KupacId");
-            csvWriter.WriteField("PocetakRezervacije");
-            csvWriter.WriteField("KrajRezervacije");
+            csvWriter.WriteField(reservation.VehicleId);
+            csvWriter.WriteField(reservation.CustomerId);
+            csvWriter.WriteField(reservation.StartDate.ToString("yy-MM-dd"));
+            csvWriter.WriteField(reservation.EndDate.ToString("yy-MM-dd"));
             csvWriter.NextRecord();
         }
-
-        csvWriter.WriteField(reservation.VehicleId);
-        csvWriter.WriteField(reservation.CustomerId);
-        csvWriter.WriteField(reservation.StartDate.ToString("yy-MM-dd"));
-        csvWriter.WriteField(reservation.EndDate.ToString("yy-MM-dd"));
-        csvWriter.NextRecord();
     }
 }
