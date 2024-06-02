@@ -102,7 +102,7 @@ public class ReservationService
     {
         var alreadyHasReservation = reservations
             .Any(reservation => reservation.CustomerId == customer.Id && 
-                                reservation.StartDate <= request.DateOfReservation && 
+                                reservation.StartDate <= request.DateOfReservation.AddDays(request.Duration) && 
                                 request.DateOfReservation <= reservation.EndDate);
 
         if (!alreadyHasReservation) 
@@ -117,7 +117,7 @@ public class ReservationService
     {
         var vehicleIsReserved = reservations
             .Any(reservation => reservation.VehicleId == vehicle.Id &&
-                                reservation.StartDate <= request.DateOfReservation && 
+                                reservation.StartDate <= request.DateOfReservation.AddDays(request.Duration) && 
                                 request.DateOfReservation <= reservation.EndDate);
 
         if (!vehicleIsReserved)
