@@ -67,8 +67,8 @@ public class ReservationRepository : IReservationRepository
         {
             csvWriter.WriteField(reservation.VehicleId);
             csvWriter.WriteField(reservation.CustomerId);
-            csvWriter.WriteField(reservation.StartDate.ToString("yy-MM-dd"));
-            csvWriter.WriteField(reservation.EndDate.ToString("yy-MM-dd"));
+            csvWriter.WriteField(reservation.StartDate.ToString("yyyy-MM-dd"));
+            csvWriter.WriteField(reservation.EndDate.ToString("yyyy-MM-dd"));
             csvWriter.NextRecord();
         }
     }
