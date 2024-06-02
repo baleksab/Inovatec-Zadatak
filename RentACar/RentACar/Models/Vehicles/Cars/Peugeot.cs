@@ -11,7 +11,7 @@ public class Peugeot : Car
 
     protected override double GetAdjustedBaseCost()
     {
-        double cost = BaseCost;
+        var cost = BaseCost;
         
         switch (CarType)
         {

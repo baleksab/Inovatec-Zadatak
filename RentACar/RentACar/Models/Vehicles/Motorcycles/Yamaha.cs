@@ -11,7 +11,7 @@ public class Yamaha : Motorcycle
 
     protected override double GetAdjustedBaseCost()
     {
-        double cost = BaseCost;
+        var cost = BaseCost;
 
         cost += BaseCost * 0.10; // u startu se cena uvećava za 10%,
 

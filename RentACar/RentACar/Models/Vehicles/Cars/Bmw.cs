@@ -10,14 +10,20 @@ public class Bmw : Car
 
     protected override double GetAdjustedBaseCost()
     {
-        double cost = BaseCost;
+        var cost = BaseCost;
         
-        if (FuelConsumption < 7) // ako troši manje od 7 litara na 100km cena se povećava za 15%,
-            cost += BaseCost * 0.15;
-        else if (FuelConsumption > 7) // ako troši više od 7 litara na 100km cena se umanjuje za 10% ,
-            cost -= BaseCost * 0.10;
-        else // u suprotnom cena se smanjuje za 15%.
-            cost -= BaseCost * 0.15;
+        switch (FuelConsumption)
+        {
+            case < 7: // ako troši manje od 7 litara na 100km cena se povećava za 15%,
+                cost += BaseCost * 0.15;
+                break;
+            case > 7: // ako troši više od 7 litara na 100km cena se umanjuje za 10% ,
+                cost -= BaseCost * 0.10;
+                break;
+            default:  // u suprotnom cena se smanjuje za 15%.
+                cost -= BaseCost * 0.15;
+                break;
+        }
 
         return cost;
     }

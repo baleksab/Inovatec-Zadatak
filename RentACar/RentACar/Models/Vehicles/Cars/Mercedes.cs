@@ -10,7 +10,7 @@ public class Mercedes : Car
 
     protected override double GetAdjustedBaseCost()
     {
-        double cost = BaseCost;
+        var cost = BaseCost;
         
         if (Mileage < 50000) // ako je prešao manje od 50000km cena se povećava za 6%
             cost += BaseCost * 0.06;

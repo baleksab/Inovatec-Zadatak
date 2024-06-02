@@ -24,7 +24,7 @@ public abstract class Car : Vehicle
 
     protected override double GetFinalRentCost()
     {
-        double adjustedCost = GetAdjustedBaseCost();
+        var adjustedCost = GetAdjustedBaseCost();
 
         foreach (var equipment in Equipments)
         {

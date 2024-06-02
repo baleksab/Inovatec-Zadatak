@@ -11,7 +11,7 @@ public class Harley : Motorcycle
 
     protected override double GetAdjustedBaseCost()
     {
-        double cost = BaseCost;
+        var cost = BaseCost;
         
         cost += BaseCost * 0.15;  // u startu se cena uvećava za 15%,
         
