@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
+using RentACar.Data;
 using RentACar.Models.Vehicles;
 using RentACar.Models.Vehicles.Cars;
 using RentACar.Models.Vehicles.Factories;
@@ -15,67 +16,15 @@ namespace RentACar.Repositories;
 
 public class VehicleRepository : IRepository<Vehicle>
 {
-    private readonly IVehicleFactory _vehicleFactory;
+    private readonly DatabaseContext _dbContext;
 
-    public VehicleRepository(IVehicleFactory vehicleFactory)
+    public VehicleRepository(DatabaseContext dbContext)
     {
-        _vehicleFactory = vehicleFactory;
+        _dbContext = dbContext;
     }
 
     public ICollection<Vehicle> GetAll()
     {
-        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-        {
-            HasHeaderRecord = true,
-            MissingFieldFound = null,
-            IgnoreBlankLines = true,
-            ShouldSkipRecord = args => args.Row.Parser.Record.All(string.IsNullOrWhiteSpace)
-        };
-        
-        using var streamReader = new StreamReader(Path.Combine(Configuration.PathToCsv, Configuration.VehicleCsv));
-        using var csvReader = new CsvReader(streamReader, config);
-
-        csvReader.Read();
-        
-        var vehicles = new List<Vehicle>();
-
-        while (csvReader.Read())
-        {
-            var id = csvReader.GetField(0);
-            var vehicleType = csvReader.GetField(1);
-            var brand = csvReader.GetField(2);
-            var model = csvReader.GetField(3);
-            var fuelConsumption = csvReader.GetField(4);
-            var engineSize = csvReader.GetField(5);
-            var mileage = csvReader.GetField(6);
-            var enginePower = csvReader.GetField(7);
-            var bodyType = csvReader.GetField(8);
-        
-            switch (vehicleType.ParseVehicleType())
-            {
-                case VehicleType.Car:
-                    var car = _vehicleFactory.CreateCar(int.Parse(id), brand.ParseVehicleBrand(), model, bodyType.ParseCarType(), 
-                        double.Parse(mileage), double.Parse(fuelConsumption));
-                    
-                    if (car is null)
-                        Console.WriteLine("Preskocem jedno vozilo tipa automobil, nije prepoznata marka!");
-                    else 
-                        vehicles.Add(car);
-                    
-                    break;
-                case VehicleType.Motorcycle:
-                    Motorcycle motorcycle = _vehicleFactory.CreateMotorcycle(int.Parse(id), brand.ParseVehicleBrand(), model, bodyType.ParseMotorcycleType(), 
-                        double.Parse(engineSize), double.Parse(enginePower), double.Parse(fuelConsumption));
-                    
-                    if (motorcycle is null)
-                        Console.WriteLine("Preskocem jedno vozilo tipa motor, nije prepoznata marka!");
-                    else 
-                        vehicles.Add(motorcycle);
-
-                    break;
-            }
-        }
-
-        return vehicles;
+        return _dbContext.Vehicles;
     }
 }

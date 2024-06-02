@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using RentACar.Data;
 using RentACar.Models;
 using RentACar.Models.Vehicles;
 using RentACar.Models.Vehicles.Factories;
@@ -24,6 +25,7 @@ public class Startup
     private static ServiceProvider RegisterServices()
     {
         var serviceProvider = new ServiceCollection()
+            .AddSingleton<DatabaseContext>()
             .AddTransient<IVehicleFactory, VehicleFactory>()
             .AddTransient<IRepository<CarEquipment>, CarEquipmentRepository>()
             .AddTransient<IRepository<Customer>, CustomerRepository>()
